@@ -26,7 +26,7 @@
             </mch:MouseWatchingHead.Effect>
         </mch:MouseWatchingHead>
         <Label Padding="0,2">Player name:</Label>
-        <TextBox Text="{Binding Playername, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+        <TextBox Text="{Binding Playername, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
                  Margin="0,0,0,10" />
         <CheckBox IsChecked="{Binding GoAway}"
                   Margin="0,0,0,10">Hide when the cursor comes</CheckBox>
