@@ -21,7 +21,7 @@ namespace CornerHead {
             set {
                 _playername = value;
                 OnPropertyChanged("Playername");
-                MinecraftSkin.LoadAsync(Playername).ContinueWith(t => {
+                MinecraftSkin.LoadByNicknameAsync(Playername).ContinueWith(t => {
                     var b = BitmapFromSource(t.Result.GetSegment(2, 2, 2, 2));
                     App.TrayIcon.Icon = System.Drawing.Icon.FromHandle(b.GetHicon());
                     b.Dispose();

@@ -19,8 +19,25 @@ namespace leMaik.McHeads {
         public static readonly DependencyProperty PlayernameProperty =
             DependencyProperty.Register("Playername", typeof(String), typeof(Head), new PropertyMetadata(String.Empty, OnPlayernamePropertyChanged));
 
+        public String Uuid {
+            get { return (String)GetValue(UuidProperty); }
+            set { SetValue(UuidProperty, value); }
+        }
+
+        public static readonly DependencyProperty UuidProperty =
+            DependencyProperty.Register("Uuid", typeof(String), typeof(Head), new PropertyMetadata(String.Empty, OnUuidPropertyChanged));
+
         private static async void OnPlayernamePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            if (((Head)d).Uuid != null) {
+                ((Head)d).Uuid = null;
+            }
             await ((Head)d).Load();
+        }
+
+        private static async void OnUuidPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            if (String.IsNullOrWhiteSpace(((Head)d).Playername)) {
+                await ((Head)d).Load();
+            }
         }
 
         private HeadSkins _skin;
@@ -90,11 +107,24 @@ namespace leMaik.McHeads {
         }
 
         public async Task Load() {
-            var skin = await HeadSkins.LoadAsync(Playername);
-            if (skin.Playername == Playername) {
-                Skin = skin;
-                if (HeadLoaded != null)
-                    HeadLoaded(this, new EventArgs());
+            if (!String.IsNullOrWhiteSpace(Uuid)) {
+                if (Skin == null || Skin.Uuid != Uuid) {
+                    var skin = await HeadSkins.LoadByUuidAsync(Uuid);
+                    if (skin.Uuid == Uuid) {
+                        Skin = skin;
+                        if (HeadLoaded != null)
+                            HeadLoaded(this, new EventArgs());
+                    }
+                }
+            }
+            else {
+                var skin = await HeadSkins.LoadAsync(Playername);
+                Uuid = skin.Uuid;
+                if (skin.Playername == Playername) {
+                    Skin = skin;
+                    if (HeadLoaded != null)
+                        HeadLoaded(this, new EventArgs());
+                }
             }
         }
 

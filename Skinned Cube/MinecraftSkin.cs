@@ -1,15 +1,19 @@
-﻿using System;
+﻿using Codeplex.Data;
+using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace leMaik.McHeads {
     public class MinecraftSkin {
-        private const String SKIN_URL = "https://skins.minecraft.net/MinecraftSkins/{0}.png";
+        private const String SKIN_URL_NICKNAME = "http://skins.minecraft.net/MinecraftSkins/{0}.png";
+        private const String SKIN_URL_UUID = "http://textures.minecraft.net/texture/{0}";
         public static readonly MinecraftSkin Steve;
         private BitmapImage _skin;
 
@@ -25,9 +29,56 @@ namespace leMaik.McHeads {
             Steve._skin = skin;
         }
 
-        public static async Task<MinecraftSkin> LoadAsync(String playername) {
+        public static async Task<MinecraftSkin> LoadByNicknameAsync(String playername) {
             var mcSkin = await Task.Run(() => {
-                var request = WebRequest.Create(String.Format(SKIN_URL, playername));
+                var request = WebRequest.Create(String.Format(SKIN_URL_NICKNAME, playername));
+                var buffer = new byte[4096];
+                var skin = new BitmapImage();
+                using (var target = new MemoryStream()) {
+                    try {
+                        using (var response = (HttpWebResponse)request.GetResponse()) {
+                            using (var stream = response.GetResponseStream()) {
+                                int read;
+
+                                while (stream != null && (read = stream.Read(buffer, 0, buffer.Length)) > 0) {
+                                    target.Write(buffer, 0, read);
+                                }
+                            }
+
+                            skin.BeginInit();
+                            skin.CacheOption = BitmapCacheOption.OnLoad;
+                            skin.StreamSource = target;
+                            skin.EndInit();
+                        }
+                    }
+                    catch (WebException) {
+                        //For some dumb reason, this is .NET framwork's way to say "hey, error 404 or so"
+                        return Steve;
+                    }
+                }
+
+                skin.Freeze();
+                return new MinecraftSkin { _skin = skin };
+            });
+            return mcSkin;
+        }
+
+        private static async Task<String> GetSkinUrl(String uuid) {
+            using (var client = new WebClient()) {
+                var rawJson = await client.DownloadStringTaskAsync(new Uri("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.Replace("_", String.Empty)));
+                dynamic json = DynamicJson.Parse(rawJson);
+                var properties = ((dynamic[])json.properties).First(p => p.name == "textures").value;
+
+                var textureData = DynamicJson.Parse(System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(properties)));
+                var textureUrl = textureData.textures.SKIN.url;
+                return textureUrl;
+            }
+        }
+
+        public static async Task<MinecraftSkin> LoadByUuidAsync(String uuid) {
+            var url = await GetSkinUrl(uuid);
+            var mcSkin = await Task.Run(() => {
+                var request = WebRequest.Create(url);
                 var buffer = new byte[4096];
                 var skin = new BitmapImage();
                 using (var target = new MemoryStream()) {

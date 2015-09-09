@@ -5,6 +5,8 @@ using System.Windows.Media.Imaging;
 
 namespace leMaik.McHeads {
     public class HeadSkins : INotifyPropertyChanged {
+        public string Uuid { get; private set; }
+
         public string Playername { get; private set; }
 
         private CubeSkin _head;
@@ -30,9 +32,17 @@ namespace leMaik.McHeads {
         private HeadSkins() { }
 
         public static async Task<HeadSkins> LoadAsync(String player) {
-            var skin = await MinecraftSkin.LoadAsync(player);
+            return assembleHead(await MinecraftSkin.LoadByNicknameAsync(player), player, null);
+        }
+
+        public static async Task<HeadSkins> LoadByUuidAsync(String uuid) {
+            return assembleHead(await MinecraftSkin.LoadByUuidAsync(uuid), null, uuid);
+        }
+
+        private static HeadSkins assembleHead(MinecraftSkin skin, String player, String uuid) {
             return new HeadSkins {
                 Playername = player,
+                Uuid = uuid,
                 Head = new CubeSkin {
                     Top = skin.GetSegment(2, 0, 2, 2),
                     Bottom = skin.GetSegment(4, 0, 2, 2),

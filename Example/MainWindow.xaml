@@ -16,7 +16,7 @@
                                  Width="200"
                                  Height="200"
                                  HeadClicked="MouseWatchingHead_Clicked" />
-        <local:MouseWatchingHead Playername="noiramo"
+        <local:MouseWatchingHead Uuid="60282835d2fe41e1b998272f94545932"
                                  Width="200"
                                  Height="200"
                                  HeadClicked="MouseWatchingHead_Clicked" />
