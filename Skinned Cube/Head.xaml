@@ -1,0 +1,285 @@
+﻿<UserControl x:Class="leMaik.McHeads.Head"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             x:Name="head">
+    <Viewport3D x:Name="viewport">
+        <Viewport3D.Resources>
+            <ScaleTransform3D x:Key="HeadScale"
+                              ScaleX="0.85"
+                              ScaleY="0.85"
+                              ScaleZ="0.85"
+                              CenterX="0"
+                              CenterY="0"
+                              CenterZ="0" />
+        </Viewport3D.Resources>
+        <Viewport3D.Camera>
+            <PerspectiveCamera Position="-5,0,0"
+                               LookDirection="1,0,0"
+                               UpDirection="0,0,1" />
+        </Viewport3D.Camera>
+        <ModelVisual3D>
+            <ModelVisual3D>
+                <ModelVisual3D.Transform>
+                    <Transform3DGroup>
+                        <RotateTransform3D>
+                            <RotateTransform3D.Rotation>
+                                <AxisAngleRotation3D Axis="1,0,0"
+                                                     Angle="{Binding ElementName=head, Path=RotationX}" />
+                            </RotateTransform3D.Rotation>
+                        </RotateTransform3D>
+                        <RotateTransform3D>
+                            <RotateTransform3D.Rotation>
+                                <AxisAngleRotation3D Axis="0,1,0"
+                                                     Angle="{Binding ElementName=head, Path=RotationY}" />
+                            </RotateTransform3D.Rotation>
+                        </RotateTransform3D>
+                        <RotateTransform3D>
+                            <RotateTransform3D.Rotation>
+                                <AxisAngleRotation3D Axis="0,0,1"
+                                                     Angle="{Binding ElementName=head, Path=RotationZ}" />
+                            </RotateTransform3D.Rotation>
+                        </RotateTransform3D>
+                        <ScaleTransform3D ScaleX="{Binding ElementName=head, Path=Scale}"
+                                          ScaleY="{Binding ElementName=head, Path=Scale}"
+                                          ScaleZ="{Binding ElementName=head, Path=Scale}"
+                                          CenterX="0"
+                                          CenterY="0"
+                                          CenterZ="0" />
+                    </Transform3DGroup>
+                </ModelVisual3D.Transform>
+                <ModelVisual3D.Content>
+                    <Model3DGroup>
+                        <!-- Kopf -->
+                        <GeometryModel3D Transform="{StaticResource HeadScale}">
+                            <GeometryModel3D.Geometry>
+                                <MeshGeometry3D Positions="-1,1,1 1,1,1 1,1,-1 -1,1,-1"
+                                                TriangleIndices="0,1,2 2,3,0"
+                                                TextureCoordinates="1,0 0,0 0,1 1,1" />
+                            </GeometryModel3D.Geometry>
+                            <GeometryModel3D.Material>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Head.Right}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.Material>
+                        </GeometryModel3D>
+                        <GeometryModel3D Transform="{StaticResource HeadScale}">
+                            <GeometryModel3D.Geometry>
+                                <MeshGeometry3D Positions="1,-1,-1 1,-1,1 1,1,1 1,1,-1"
+                                                TriangleIndices="0,3,2 2,1,0"
+                                                TextureCoordinates="0,1 0,0 1,0 1,1" />
+                            </GeometryModel3D.Geometry>
+                            <GeometryModel3D.Material>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Head.Back}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.Material>
+                        </GeometryModel3D>
+                        <GeometryModel3D Transform="{StaticResource HeadScale}">
+                            <GeometryModel3D.Geometry>
+                                <MeshGeometry3D Positions="-1,-1,1 1,-1,1 1,-1,-1 -1,-1,-1"
+                                                TriangleIndices="0,2,1 3,2,0"
+                                                TextureCoordinates="0,0 1,0 1,1 0,1" />
+                            </GeometryModel3D.Geometry>
+                            <GeometryModel3D.Material>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Head.Left}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.Material>
+                        </GeometryModel3D>
+                        <GeometryModel3D Transform="{StaticResource HeadScale}">
+                            <GeometryModel3D.Geometry>
+                                <MeshGeometry3D Positions="-1,-1,1 -1,1,-1 -1,1,1 -1,-1,-1"
+                                                TriangleIndices="3,2,1 0,2,3"
+                                                TextureCoordinates="1,0 0,1 0,0 1,1" />
+                            </GeometryModel3D.Geometry>
+                            <GeometryModel3D.Material>
+                                <DiffuseMaterial RenderOptions.BitmapScalingMode="NearestNeighbor">
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Head.Front}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.Material>
+                        </GeometryModel3D>
+                        <GeometryModel3D Transform="{StaticResource HeadScale}">
+                            <GeometryModel3D.Geometry>
+                                <MeshGeometry3D Positions="-1,-1,1 -1,1,1 1,1,1 1,-1,1"
+                                                TriangleIndices="1,0,2 3,2,0"
+                                                TextureCoordinates="1,1 0,1 0,0 1,0" />
+                            </GeometryModel3D.Geometry>
+                            <GeometryModel3D.Material>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Head.Top}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.Material>
+                        </GeometryModel3D>
+                        <GeometryModel3D Transform="{StaticResource HeadScale}">
+                            <GeometryModel3D.Geometry>
+                                <MeshGeometry3D Positions="-1,-1,-1 -1,1,-1 1,1,-1 1,-1,-1"
+                                                TriangleIndices="0,1,2 2,3,0"
+                                                TextureCoordinates="1,1 0,1 0,0 1,0" />
+                            </GeometryModel3D.Geometry>
+                            <GeometryModel3D.Material>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Head.Bottom}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.Material>
+                        </GeometryModel3D>
+
+                        <!-- Helm -->
+                        <GeometryModel3D>
+                            <GeometryModel3D.Geometry>
+                                <MeshGeometry3D Positions="-1,1,1 1,1,1 1,1,-1 -1,1,-1"
+                                                TriangleIndices="0,1,2 2,3,0"
+                                                TextureCoordinates="1,0 0,0 0,1 1,1" />
+                            </GeometryModel3D.Geometry>
+                            <GeometryModel3D.Material>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Helmet.Right}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.Material>
+                            <GeometryModel3D.BackMaterial>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Helmet.Right}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.BackMaterial>
+                        </GeometryModel3D>
+                        <GeometryModel3D>
+                            <GeometryModel3D.Geometry>
+                                <MeshGeometry3D Positions="1,-1,-1 1,-1,1 1,1,1 1,1,-1"
+                                                TriangleIndices="0,3,2 2,1,0"
+                                                TextureCoordinates="0,1 0,0 1,0 1,1" />
+                            </GeometryModel3D.Geometry>
+                            <GeometryModel3D.Material>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Helmet.Back}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.Material>
+                            <GeometryModel3D.BackMaterial>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Helmet.Back}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.BackMaterial>
+                        </GeometryModel3D>
+                        <GeometryModel3D>
+                            <GeometryModel3D.Geometry>
+                                <MeshGeometry3D Positions="-1,-1,1 1,-1,1 1,-1,-1 -1,-1,-1"
+                                                TriangleIndices="0,2,1 3,2,0"
+                                                TextureCoordinates="0,0 1,0 1,1 0,1" />
+                            </GeometryModel3D.Geometry>
+                            <GeometryModel3D.Material>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Helmet.Left}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.Material>
+                            <GeometryModel3D.BackMaterial>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Helmet.Left}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.BackMaterial>
+                        </GeometryModel3D>
+                        <GeometryModel3D>
+                            <GeometryModel3D.Geometry>
+                                <MeshGeometry3D Positions="-1,-1,1 -1,1,1 1,1,1 1,-1,1"
+                                                TriangleIndices="0,2,3 0,1,2"
+                                                TextureCoordinates="1,1 0,1 0,0 1,0" />
+                            </GeometryModel3D.Geometry>
+                            <GeometryModel3D.Material>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Helmet.Top}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.Material>
+                            <GeometryModel3D.BackMaterial>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Helmet.Top}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.BackMaterial>
+                        </GeometryModel3D>
+                        <GeometryModel3D>
+                            <GeometryModel3D.Geometry>
+                                <MeshGeometry3D Positions="-1,-1,-1 -1,1,-1 1,1,-1 1,-1,-1"
+                                                TriangleIndices="0,1,2 2,3,0"
+                                                TextureCoordinates="1,1 0,1 0,0 1,0"
+                                                Normals="0,0,-1 0,0,-1 0,0,-1 0,0,-1 0,0,-1 0,0,-1 " />
+                            </GeometryModel3D.Geometry>
+                            <GeometryModel3D.Material>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Helmet.Bottom}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.Material>
+                            <GeometryModel3D.BackMaterial>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Helmet.Bottom}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.BackMaterial>
+                        </GeometryModel3D>
+                        <GeometryModel3D>
+                            <GeometryModel3D.Geometry>
+                                <MeshGeometry3D Positions="-1,-1,1 -1,1,-1 -1,1,1 -1,-1,-1"
+                                                TriangleIndices="0,2,3 3,2,1"
+                                                TextureCoordinates="1,0 0,1 0,0 1,1" />
+                            </GeometryModel3D.Geometry>
+                            <GeometryModel3D.Material>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Helmet.Front}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.Material>
+                            <GeometryModel3D.BackMaterial>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush ImageSource="{Binding ElementName=head, Path=Skin.Helmet.Front}" />
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </GeometryModel3D.BackMaterial>
+                        </GeometryModel3D>
+                    </Model3DGroup>
+                </ModelVisual3D.Content>
+            </ModelVisual3D>
+            <ModelVisual3D>
+                <ModelVisual3D.Content>
+                    <Model3DGroup>
+                        <DirectionalLight Direction="1,-1,-1" />
+                        <DirectionalLight Direction="1,1,-1" />
+                        <DirectionalLight Direction="0,0,1" />
+                    </Model3DGroup>
+                </ModelVisual3D.Content>
+            </ModelVisual3D>
+        </ModelVisual3D>
+    </Viewport3D>
+</UserControl>

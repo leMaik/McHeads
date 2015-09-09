@@ -1,0 +1,187 @@
+﻿<#
+// WICHTIG: Derzeit werden nur folgende Typen für Einstellungen unterstützt:
+//			string, bool, int, double
+#>
+<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ output extension=".generated.cs" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="EnvDTE" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Collections.Generic" #>
+/*
+So you thought WPF and bindings were voodoo? - Nope, THIS is voodoo!
+<#=System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(getVoodoo()))#>
+*/
+
+using System; 
+using System.Text;
+using System.Xml; 
+
+namespace CornerHead {
+    ///<summary>
+    ///Einstellungen für CornerHead.
+    ///Generiert am <#=DateTime.Now.ToString(@"dd.MM.yyyy \u\m H:mm")#> Uhr.
+    ///</summary>
+    public static class Settings {
+        #region Private Variablen
+<#
+        Dictionary<string, Dictionary<string, XmlNodeType>> nodeTypes = new Dictionary<string, Dictionary<string, XmlNodeType>>();
+
+        // The Visual Studio host, to get the local file path.
+        EnvDTE.DTE dte = (EnvDTE.DTE) ((IServiceProvider) this.Host).GetService(typeof(EnvDTE.DTE));
+        XmlDocument doc = new XmlDocument();
+        doc.Load(System.IO.Path.Combine(dte.ActiveDocument.Path, "settings.xml"));
+
+        foreach (XmlNode node in doc.SelectNodes("//option")) {
+#>
+        private static <#=node.Attributes["type"].Value#> _<#=node.Attributes["name"].Value#> = <#=node.InnerText#>;
+<#
+        }
+#>
+        #endregion
+
+        #region Öffentliche Felder
+<#
+        foreach (XmlNode node in doc.SelectNodes("//option")) {
+            if (node.Attributes["hint"] != null) {
+#>
+        ///<summary>
+        ///<#=node.Attributes["hint"].Value#>
+        ///</summary>
+<#
+            }
+#>
+        public static <#=node.Attributes["type"].Value#> <#=node.Attributes["name"].Value#> {
+            get { return _<#=node.Attributes["name"].Value#>; }
+            set {
+                _<#=node.Attributes["name"].Value#> = value;
+            }
+        }
+
+<#
+        }
+#>
+        #endregion
+
+        ///<summary>
+        ///Lädt die Einstellungen aus der angegebenen XML-Datei. Sollte dabei ein Fehler auftreten, wird die Datei mit den aktuellen Einstellungen überschrieben.
+        ///</summary>
+        ///<param name="filename">Dateiname</param>
+        ///<param name="settingsVersion">Version der Einstellungen (bei neuerer Version werden vorhandene Einstellungen ignoriert, falls die neuen erzwungen werden)</param>
+        public static void Load(String filename, String settingsVersion) {
+            XmlNode temp;
+            XmlDocument doc = new XmlDocument();
+            doc.Load(filename);
+            String xmlVersion= doc.SelectSingleNode("/settings").Attributes["version"].Value;
+
+            try {
+<#          
+            foreach (XmlNode node in doc.SelectNodes("//option")) {
+#>
+                temp = doc.SelectSingleNode("//option[@name='<#=node.Attributes["name"].Value#>']");
+<#
+                if (node.Attributes["forceonupdate"] != null && node.Attributes["forceonupdate"].Value == "true") {
+#>
+                if (temp != null && xmlVersion == settingsVersion)
+<#
+                } else {
+#>
+                if (temp != null)
+<#
+                }
+                if (node.Attributes["type"].Value.ToLower() != "string") {
+#>
+                    <#=node.Attributes["name"].Value#> = <#=node.Attributes["type"].Value#>.Parse(temp.InnerText);
+<#              
+                } else {
+#>
+                    <#=node.Attributes["name"].Value#> = temp.InnerText;
+<#
+                }
+            }
+#>
+            } 
+            catch {
+                Save(filename, settingsVersion);
+            }
+        }
+
+        ///<summary>
+        ///Speichert die Einstellungen in die angegebene XML-Datei.
+        ///</summary>
+        ///<param name="filename">Dateiname</param>
+        ///<param name="settingsVersion">Version der Einstellungen</param>
+        public static void Save(String filename, String settingsVersion) {
+            XmlTextWriter xml = new XmlTextWriter(filename, Encoding.UTF8);
+            xml.Formatting = Formatting.Indented;
+            xml.WriteStartDocument();
+            xml.WriteStartElement("settings");
+            xml.WriteAttributeString("version", settingsVersion);
+<#
+            foreach (XmlNode node in doc.SelectNodes("//option")) {
+#>
+
+            xml.WriteStartElement("option");
+            xml.WriteAttributeString("name", "<#=node.Attributes["name"].Value#>");
+<#
+			if (!getType(node.Attributes["type"].Value).IsValueType) { 
+#>
+			if(<#=node.Attributes["name"].Value#> != null) {
+				xml.WriteCData(<#=node.Attributes["name"].Value#>.ToString());
+			} else {
+				xml.WriteCData(String.Empty);
+			}
+<#
+			} else {
+#>
+			xml.WriteCData(<#=node.Attributes["name"].Value#>.ToString());
+<#
+			}
+#>
+            xml.WriteEndElement();
+<#
+            }
+#>
+
+            xml.WriteEndElement();
+            xml.WriteEndDocument();
+            xml.Close();
+        }
+    }
+}
+
+<#+private Type getType(String name) {
+	if (name.Equals("bool", StringComparison.OrdinalIgnoreCase))
+		return typeof(bool);
+	if (name.Equals("string", StringComparison.OrdinalIgnoreCase))
+		return typeof(string);
+	if (name.Equals("int", StringComparison.OrdinalIgnoreCase))
+		return typeof(int);
+	if (name.Equals("double", StringComparison.OrdinalIgnoreCase))
+		return typeof(double);
+	return null;
+}
+#>
+<#+private String getVoodoo() {
+ return @"ICAgICAgICAgICAgICAgICAgICAgICAgICAgLF8vXF8sJywvXA0KICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgXF8gXyBfIF8gLw0KICAgICAgICAgICAgICAgICAgICAgICAgICAgLyAgICAgICAg
+YGBcDQogICAgICAgICAgICAgICAgICAgICAgICAgL2AgICAgICAgICAgICBgXA0KICAgICAgICAg
+ICAgICAgICAgICAgICAgLyAgLC0sICAgICAgLC0sICBgLA0KICAgICAgICAgICAgICAgICAgICAg
+ICAgfCAoIHggKSAgICAoIHggKSAgfA0KICAgICAgICAgICAgICAgICAgICAgICAgfCAgYC0nICAg
+ICAgYC0nICAgfCAgIE8NCiAgICAgICAgICAgICAgICAgICAgICAgIFwgICAgICAgPT0gICAgICAg
+IC8gIC8NCiAgICAgICAgICAgICAgICAgICAgICAgICBcICAgLV8gXyBfIC0gICAgLyAgLw0KICAg
+ICAgICAgICAgICAgICAgICAgICBPICBcXyAgICAgICAgICAgXycgIC8NCiAgICAgICAgICAgICAg
+ICAgICAgICAgIFwgIF8+LSAtIC0gLSAtPF8gIC8NCiAgICAgICAgICAgICAgICAgICAgICAgICxc
+YCAgICAgICAgICAgICBgLywNCiAgICAgICAgICAgICAgICAgICAgICAsJyAgXCAgICAgICAgICAg
+ICwvICBgLg0KICAgICAgICAgICAgICAgICAgICAsJyAgICAgXCAgICAgICAgICAgYF4gICAgYC4N
+CiAgICAgICAgICAgICAgICAgICxgICAgICAgICBcLCAgICAgICAgICAgICAgICAgYC4NCiAgICAg
+ICAgICAgICAgICAgLCAgICAgICAgICBeYCAgICAgICAgICAgICAgICAgICBgLA0KICAgICAgICAg
+ICAgICAgLCcgICAgICAgICwgICAgICAgICAgICAgICB8XCAgICAgICAgJywNCiAgICAgICAgICAg
+ICAgLCAgICAgICAgIC98ICAgICAgICAgICAgICAgXCBgLiAgICAgICAgKQ0KICAgICAgICAgICAg
+IC8gICAgICAgICwnIHwgICAgICAgICAgICAgICAgfCAgYCcsICAgICxgPg0KICAgICAgICAgICAg
+IHwgICAgICAsJyAgIC8gICAgICAgICAgICAgICAgXCAgICAgYGAtcl9cYA0KICAgICAgICAgICAs
+LVwgICAsJ2AgICAgfCAgICAgICAgICAgICAgICAgIHwgICAgICAgYA0KICAgICAgICAgIGAtTCAv
+YGAgICAgICAgfCAgICAgICAgICAgICAgICAgIHwgICAtWkVVUy0NCiAgICAgICAgICAgICBWICAg
+ICAgICAgIHwgICAgICAgICAgICAgICAgICB8";
+}
+#>

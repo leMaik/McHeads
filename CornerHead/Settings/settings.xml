@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <option name="playername" type="string">"Dinnerbone"</option>
+  <option name="size" type="int">200</option>
+  <option name="goaway" type="bool">true</option>
+  <option name="position" type="int" hint="Die Positon des Kopfes. Erlaubt sind Werte von 0 bis 3, mit Bedeutung: oben links, oben rechts, unten links, unten rechts.">0</option>
+  <option name="opacity" type="double">1</option>
+</settings>

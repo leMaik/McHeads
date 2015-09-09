@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McHeads", "Skinned Cube\McHeads.csproj", "{E4897F6F-D7FD-4709-8C63-E7C420D5DE33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example\Example.csproj", "{831365D4-1CC9-4E21-9BA0-292ACC3BE6F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CornerHead", "CornerHead\CornerHead.csproj", "{85529B28-CE9D-4AC5-979A-F9F33302ABD2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4897F6F-D7FD-4709-8C63-E7C420D5DE33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4897F6F-D7FD-4709-8C63-E7C420D5DE33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4897F6F-D7FD-4709-8C63-E7C420D5DE33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4897F6F-D7FD-4709-8C63-E7C420D5DE33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{831365D4-1CC9-4E21-9BA0-292ACC3BE6F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{831365D4-1CC9-4E21-9BA0-292ACC3BE6F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{831365D4-1CC9-4E21-9BA0-292ACC3BE6F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{831365D4-1CC9-4E21-9BA0-292ACC3BE6F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85529B28-CE9D-4AC5-979A-F9F33302ABD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85529B28-CE9D-4AC5-979A-F9F33302ABD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85529B28-CE9D-4AC5-979A-F9F33302ABD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85529B28-CE9D-4AC5-979A-F9F33302ABD2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

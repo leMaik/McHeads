@@ -1,0 +1,87 @@
+﻿<Window x:Class="CornerHead.ConfigWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mch="clr-namespace:leMaik.McHeads;assembly=leMaik.McHeads"
+        Title="Configuration"
+        Width="250"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="ToolWindow"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize">
+    <StackPanel Orientation="Vertical"
+                Margin="10">
+        <Image Source="icon.png"
+               Width="128"
+               Height="128"
+               UseLayoutRounding="True" />
+        <mch:MouseWatchingHead Playername="leMaik"
+                               Margin="40 -165 0 0"
+                               Width="110"
+                               Height="110">
+            <mch:MouseWatchingHead.Effect>
+                <DropShadowEffect BlurRadius="5"
+                                  ShadowDepth="0"
+                                  Color="Black" />
+            </mch:MouseWatchingHead.Effect>
+        </mch:MouseWatchingHead>
+        <Label Padding="0,2">Player name:</Label>
+        <TextBox Text="{Binding Playername, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                 Margin="0,0,0,10" />
+        <CheckBox IsChecked="{Binding GoAway}"
+                  Margin="0,0,0,10">Hide when the cursor comes</CheckBox>
+        <Label Padding="0,2">Opacity:</Label>
+        <Slider Value="{Binding HeadOpacity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                Minimum="0.1"
+                Maximum="1"
+                TickPlacement="BottomRight"
+                Margin="0,0,0,10" />
+        <Grid Margin="0,0,0,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Vertical"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Margin="0,0,5,0">
+                <Label Padding="0,2">Size:</Label>
+                <ComboBox SelectedValuePath="Tag"
+                          SelectedValue="{Binding Size, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                    <ComboBoxItem Content="Tiny"
+                                  Tag="100" />
+                    <ComboBoxItem Content="Medium"
+                                  Tag="200" />
+                    <ComboBoxItem Content="Tall"
+                                  Tag="300" />
+                    <ComboBoxItem Content="Grande"
+                                  Tag="500" />
+                    <ComboBoxItem Content="Venti"
+                                  Tag="1000" />
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="5,0,0,0">
+                <Label Padding="0,2">Position:</Label>
+                <ComboBox SelectedIndex="{Binding Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBoxItem Content="Top left" />
+                    <ComboBoxItem Content="Top right" />
+                    <ComboBoxItem Content="Bottom left" />
+                    <ComboBoxItem Content="Bottom right" />
+                </ComboBox>
+            </StackPanel>
+        </Grid>
+        <Border BorderThickness="0,1,0,0"
+                BorderBrush="Gray">
+            <TextBlock Padding="0,2"
+                       TextAlignment="Right"
+                       FontStyle="Italic"
+                       Foreground="Gray">Made with love by
+            <Hyperlink NavigateUri="http://leMaik.de">leMaik</Hyperlink>.</TextBlock>
+        </Border>
+    </StackPanel>
+</Window>
