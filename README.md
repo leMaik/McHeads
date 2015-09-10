@@ -23,7 +23,7 @@ The `Head` element has `RotationX`, `RotationY` and `RotationZ` properties to ro
 The `Scale` property can be used to slightly adjust the head size. The default value is `1.0`, so that the head will always fit into the bounding box.
 
 ## Bonus: Mouse watching head
-The scenario I originally coded the element was to have a head that always looks at the user's cursor. The `MouseWatchingHead` is implemented as a subclass of `Head`.
+The scenario I originally coded the element for was to have a head that always looks at the user's cursor. Here comes the solution: The `MouseWatchingHead`, a subclass of `Head`.
 
 ```xaml
 <mcheads:MouseWatchingHead Uuid="94d67f2f-d039-419b-8958-abe6b25916b0"/>
