@@ -1,6 +1,11 @@
 # McHeads
 McHeads is a WPF element for displaying 3D Minecraft heads. It supports getting a skin either by player name or by UUID.
 
+## Installation
+You can either clone this repository and build the binaries from source or simply install the [NuGet package][nuget] using `PM> Install-Package leMaik.McHeads`.
+
+[nuget]: http://www.nuget.org/packages/leMaik.McHeads/
+
 ## Usage
 You need to import the namespace into your XAML document. The following examples assume that you imported it as `mcheads`.
 
