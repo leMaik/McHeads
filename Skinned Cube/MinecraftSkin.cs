@@ -15,18 +15,19 @@ namespace leMaik.McHeads {
         private const String SKIN_URL_NICKNAME = "http://skins.minecraft.net/MinecraftSkins/{0}.png";
         private const String SKIN_URL_UUID = "http://textures.minecraft.net/texture/{0}";
         public static readonly MinecraftSkin Steve;
-        private BitmapImage _skin;
+        private readonly BitmapImage _skin;
 
-        private MinecraftSkin() { }
+        private MinecraftSkin(BitmapImage skin) {
+            _skin = skin;
+        }
 
         static MinecraftSkin() {
-            Steve = new MinecraftSkin();
             var skin = new BitmapImage();
             skin.BeginInit();
             skin.StreamSource = Assembly.GetExecutingAssembly().GetManifestResourceStream("leMaik.McHeads.steve.png");
             skin.EndInit();
             skin.Freeze();
-            Steve._skin = skin;
+            Steve = new MinecraftSkin(skin);
         }
 
         public static async Task<MinecraftSkin> LoadByNicknameAsync(String playername) {
@@ -58,14 +59,14 @@ namespace leMaik.McHeads {
                 }
 
                 skin.Freeze();
-                return new MinecraftSkin { _skin = skin };
+                return new MinecraftSkin(skin);
             });
             return mcSkin;
         }
 
         private static async Task<String> GetSkinUrl(String uuid) {
             using (var client = new WebClient()) {
-                var rawJson = await client.DownloadStringTaskAsync(new Uri("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.Replace("_", String.Empty)));
+                var rawJson = await client.DownloadStringTaskAsync(new Uri("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.Replace("-", String.Empty)));
                 dynamic json = DynamicJson.Parse(rawJson);
                 var properties = ((dynamic[])json.properties).First(p => p.name == "textures").value;
 
@@ -76,7 +77,13 @@ namespace leMaik.McHeads {
         }
 
         public static async Task<MinecraftSkin> LoadByUuidAsync(String uuid) {
-            var url = await GetSkinUrl(uuid);
+            string url;
+            try {
+                url = await GetSkinUrl(uuid);
+            }
+            catch {
+                return Steve;
+            }
             var mcSkin = await Task.Run(() => {
                 var request = WebRequest.Create(url);
                 var buffer = new byte[4096];
@@ -105,7 +112,7 @@ namespace leMaik.McHeads {
                 }
 
                 skin.Freeze();
-                return new MinecraftSkin { _skin = skin };
+                return new MinecraftSkin(skin);
             });
             return mcSkin;
         }
