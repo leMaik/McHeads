@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -52,8 +51,8 @@ namespace leMaik.McHeads {
                             skin.EndInit();
                         }
                     }
-                    catch (WebException) {
-                        //For some dumb reason, this is .NET framwork's way to say "hey, error 404 or so"
+                    catch {
+                        //web exception, or maybe decoding the image failed
                         return Steve;
                     }
                 }
@@ -105,8 +104,8 @@ namespace leMaik.McHeads {
                             skin.EndInit();
                         }
                     }
-                    catch (WebException) {
-                        //For some dumb reason, this is .NET framwork's way to say "hey, error 404 or so"
+                    catch {
+                        //web exception, or maybe decoding the image failed
                         return Steve;
                     }
                 }
