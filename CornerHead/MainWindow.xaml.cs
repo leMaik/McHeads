@@ -100,18 +100,13 @@ namespace CornerHead {
             Playername = Settings.playername;
             Size = Settings.size;
 
-            Left = (Settings.position == 0 || Settings.position == 2) ? 0 : SystemParameters.VirtualScreenWidth - Size;
-            Top = Settings.position <= 1 ? 0 : SystemParameters.VirtualScreenHeight - Size;
+            Left = (Settings.position == 0 || Settings.position == 2) ? 0 : SystemParameters.WorkArea.Width - Size;
+            Top = Settings.position <= 1 ? 0 : SystemParameters.WorkArea.Height - Size;
             Opacity = Settings.opacity;
         }
 
         private bool IsPointOverForm(Point p) {
             return p.X >= Left && p.X <= Left + ActualWidth && p.Y >= Top && p.Y <= Top + ActualHeight;
-        }
-
-        private void Window_MouseEnter(object sender, MouseEventArgs e) {
-            //if (Settings.goaway)
-            //    BeginAnimation(LeftProperty, new DoubleAnimation(PositonX == 0 ? ActualWidth : 0, new Duration(TimeSpan.FromMilliseconds(250))));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

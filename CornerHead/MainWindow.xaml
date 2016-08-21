@@ -7,7 +7,6 @@
         WindowStyle="None"
         Background="{x:Null}"
         Topmost="True"
-        MouseEnter="Window_MouseEnter"
         SizeToContent="WidthAndHeight"
         ShowInTaskbar="False">
     <mch:MouseWatchingHead Playername="{Binding Playername, UpdateSourceTrigger=PropertyChanged}"
