@@ -7,7 +7,8 @@
              d:DesignHeight="300"
              d:DesignWidth="300"
              x:Name="head">
-    <Viewport3D x:Name="viewport">
+    <Viewport3D x:Name="viewport"
+                ToolTip="{Binding ElementName=head, Path=ToolTip}">
         <Viewport3D.Resources>
             <ScaleTransform3D x:Key="HeadScale"
                               ScaleX="0.85"
