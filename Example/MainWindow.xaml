@@ -28,7 +28,7 @@
                                  Width="200"
                                  Height="200">
             <local:MouseWatchingHead.Triggers>
-                <EventTrigger RoutedEvent="local:MouseWatchingHead.HeadClicked">
+                <EventTrigger RoutedEvent="local:MouseWatchingHead.HeadLoaded">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation Storyboard.TargetProperty="Scale"

@@ -136,7 +136,7 @@ namespace leMaik.McHeads {
             add { AddHandler(HeadLoadedEvent, value); }
             remove { RemoveHandler(HeadLoadedEvent, value); }
         }
-        public static readonly RoutedEvent HeadLoadedEvent = EventManager.RegisterRoutedEvent("HeadLoadedEvent", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(Head));
+        public static readonly RoutedEvent HeadLoadedEvent = EventManager.RegisterRoutedEvent("HeadLoaded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(Head));
 
         public event PropertyChangedEventHandler PropertyChanged;
     }
