@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>leMaik.McHeads</id>
+    <title>leMaik.McHeads</title>
+    <version>$version$</version>
+    <authors>Maik Marschner</authors>
+    <owners>leMaik</owners>
+    <description>A tiny library that brings Minecraft heads to WPF.</description>
+    <licenseUrl>https://github.com/leMaik/McHeads/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/leMaik/McHeads</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <releaseNotes>Expose HeadLoaded as RoutedEvent for use in XAML.</releaseNotes>
+    <copyright>Copyright 2015-2016 Maik Marschner</copyright>
+    <tags>minecraft heads wpf</tags>
+  </metadata>
+</package>

@@ -50,8 +50,6 @@ namespace leMaik.McHeads {
             }
         }
 
-        public event EventHandler HeadLoaded;
-
         public double RotationX {
             get { return (double)GetValue(RotationXProperty); }
             set { SetValue(RotationXProperty, value); }
@@ -112,8 +110,7 @@ namespace leMaik.McHeads {
                     var skin = await HeadSkins.LoadByUuidAsync(Uuid);
                     if (skin.Uuid == Uuid) {
                         Skin = skin;
-                        if (HeadLoaded != null)
-                            HeadLoaded(this, new EventArgs());
+                        RaiseEvent(new RoutedEventArgs(HeadLoadedEvent));
                     }
                 }
             }
@@ -122,17 +119,24 @@ namespace leMaik.McHeads {
                 Uuid = skin.Uuid;
                 if (skin.Playername == Playername) {
                     Skin = skin;
-                    if (HeadLoaded != null)
-                        HeadLoaded(this, new EventArgs());
+                    RaiseEvent(new RoutedEventArgs(HeadLoadedEvent));
                 }
             }
         }
 
-        public event RoutedEventHandler HeadClicked {
+        public event RoutedEventHandler HeadClicked
+        {
             add { AddHandler(HeadClickedEvent, value); }
             remove { RemoveHandler(HeadClickedEvent, value); }
         }
         public static readonly RoutedEvent HeadClickedEvent = EventManager.RegisterRoutedEvent("HeadClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(Head));
+
+        public event RoutedEventHandler HeadLoaded
+        {
+            add { AddHandler(HeadLoadedEvent, value); }
+            remove { RemoveHandler(HeadLoadedEvent, value); }
+        }
+        public static readonly RoutedEvent HeadLoadedEvent = EventManager.RegisterRoutedEvent("HeadLoadedEvent", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(Head));
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

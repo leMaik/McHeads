@@ -11,7 +11,7 @@ using System.Windows;
 [assembly: AssemblyDescription("A tiny lib for Minecraft heads.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Maik Marschner")]
-[assembly: AssemblyProduct("Skinned Cube")]
+[assembly: AssemblyProduct("McHeads")]
 [assembly: AssemblyCopyright("Copyright 2015-2016 Maik Marschner")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -51,5 +51,5 @@ using System.Windows;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern 
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2.2.0")]
-[assembly: AssemblyFileVersion("1.2.2.0")]
+[assembly: AssemblyVersion("1.4.0.0")]
+[assembly: AssemblyFileVersion("1.4.0.0")]
