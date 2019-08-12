@@ -9,16 +9,16 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace leMaik.McHeads {
-    public class MinecraftSkin {
-        private const String SKIN_URL_NICKNAME = "http://skins.minecraft.net/MinecraftSkins/{0}.png";
-        private const String SKIN_URL_UUID = "http://textures.minecraft.net/texture/{0}";
+namespace leMaik.McHeads
+{
+    public class MinecraftSkin
+    {
+        //private const String SKIN_URL_NICKNAME = "http://skins.minecraft.net/MinecraftSkins/{0}.png";
+        private const          String        SKIN_URL_UUID = "http://textures.minecraft.net/texture/{0}";
         public static readonly MinecraftSkin Steve;
-        private readonly BitmapImage _skin;
+        private readonly       BitmapImage   _skin;
 
-        private MinecraftSkin(BitmapImage skin) {
-            _skin = skin;
-        }
+        private MinecraftSkin(BitmapImage skin) { _skin = skin; }
 
         static MinecraftSkin() {
             var skin = new BitmapImage();
@@ -30,50 +30,23 @@ namespace leMaik.McHeads {
         }
 
         public static async Task<MinecraftSkin> LoadByNicknameAsync(String playername) {
-            var mcSkin = await Task.Run(() => {
-                var request = WebRequest.Create(String.Format(SKIN_URL_NICKNAME, playername));
-                var buffer = new byte[4096];
-                var skin = new BitmapImage();
-                using (var target = new MemoryStream()) {
-                    try {
-                        using (var response = (HttpWebResponse)request.GetResponse()) {
-                            using (var stream = response.GetResponseStream()) {
-                                int read;
 
-                                while (stream != null && (read = stream.Read(buffer, 0, buffer.Length)) > 0) {
-                                    target.Write(buffer, 0, read);
-                                }
-                            }
+            return await Task.Run(async () => {
+                                      try {
+                                          using (var client = new WebClient()) {
+                                              var rawJson = client.DownloadString(new Uri("https://api.mojang.com/users/profiles/minecraft/" + playername));
+                                              dynamic json = DynamicJson.Parse(rawJson);
+                                              return await LoadByUuidAsync(json["id"]);
+                                          }
+                                      }
+                                      catch (Exception) {
+                                          return Steve;
+                                      }
+                                  });
 
-                            skin.BeginInit();
-                            skin.CacheOption = BitmapCacheOption.OnLoad;
-                            skin.StreamSource = target;
-                            skin.EndInit();
-                        }
-                    }
-                    catch {
-                        //web exception, or maybe decoding the image failed
-                        return Steve;
-                    }
-                }
-
-                skin.Freeze();
-                return new MinecraftSkin(skin);
-            });
-            return mcSkin;
         }
 
-        private static async Task<String> GetSkinUrl(String uuid) {
-            using (var client = new WebClient()) {
-                var rawJson = await client.DownloadStringTaskAsync(new Uri("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.Replace("-", String.Empty)));
-                dynamic json = DynamicJson.Parse(rawJson);
-                var properties = ((dynamic[])json.properties).First(p => p.name == "textures").value;
-
-                var textureData = DynamicJson.Parse(System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(properties)));
-                var textureUrl = textureData.textures.SKIN.url;
-                return textureUrl;
-            }
-        }
+        private static async Task<String> GetSkinUrl(String uuid) { return "https://crafatar.com/skins/" + uuid.Replace("-", String.Empty); }
 
         public static async Task<MinecraftSkin> LoadByUuidAsync(String uuid) {
             string url;
@@ -83,36 +56,37 @@ namespace leMaik.McHeads {
             catch {
                 return Steve;
             }
+
             var mcSkin = await Task.Run(() => {
-                var request = WebRequest.Create(url);
-                var buffer = new byte[4096];
-                var skin = new BitmapImage();
-                using (var target = new MemoryStream()) {
-                    try {
-                        using (var response = (HttpWebResponse)request.GetResponse()) {
-                            using (var stream = response.GetResponseStream()) {
-                                int read;
+                                            var request = WebRequest.Create(url);
+                                            var buffer = new byte[4096];
+                                            var skin = new BitmapImage();
+                                            using (var target = new MemoryStream()) {
+                                                try {
+                                                    using (var response = (HttpWebResponse) request.GetResponse()) {
+                                                        using (var stream = response.GetResponseStream()) {
+                                                            int read;
 
-                                while (stream != null && (read = stream.Read(buffer, 0, buffer.Length)) > 0) {
-                                    target.Write(buffer, 0, read);
-                                }
-                            }
+                                                            while (stream != null && (read = stream.Read(buffer, 0, buffer.Length)) > 0) {
+                                                                target.Write(buffer, 0, read);
+                                                            }
+                                                        }
 
-                            skin.BeginInit();
-                            skin.CacheOption = BitmapCacheOption.OnLoad;
-                            skin.StreamSource = target;
-                            skin.EndInit();
-                        }
-                    }
-                    catch {
-                        //web exception, or maybe decoding the image failed
-                        return Steve;
-                    }
-                }
+                                                        skin.BeginInit();
+                                                        skin.CacheOption = BitmapCacheOption.OnLoad;
+                                                        skin.StreamSource = target;
+                                                        skin.EndInit();
+                                                    }
+                                                }
+                                                catch {
+                                                    //web exception, or maybe decoding the image failed
+                                                    return Steve;
+                                                }
+                                            }
 
-                skin.Freeze();
-                return new MinecraftSkin(skin);
-            });
+                                            skin.Freeze();
+                                            return new MinecraftSkin(skin);
+                                        });
             return mcSkin;
         }
 
@@ -133,12 +107,18 @@ namespace leMaik.McHeads {
                 drawingContext.DrawDrawing(group);
 
             var resizedImage = new RenderTargetBitmap(
-                width, height,         // Resized dimensions
-                96, 96,                // Default DPI values
-                PixelFormats.Default); // Default pixel format
+                                                      width, height,         // Resized dimensions
+                                                      96, 96,                // Default DPI values
+                                                      PixelFormats.Default); // Default pixel format
             resizedImage.Render(drawingVisual);
 
             return BitmapFrame.Create(resizedImage);
         }
+    }
+
+    public class MinecraftProfileManifest
+    {
+        public string id   { get; set; }
+        public string name { get; set; }
     }
 }
