@@ -9,41 +9,51 @@
         Width="1000"
         Background="White"
         WindowStyle="SingleBorderWindow">
-    <StackPanel Height="200"
-                Width="800"
-                Orientation="Horizontal">
-        <local:MouseWatchingHead Playername="{Binding skin, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                 Width="200"
-                                 Height="200"
-                                 HeadClicked="MouseWatchingHead_Clicked"
-                                 ToolTip="{Binding skin, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-        <local:MouseWatchingHead Uuid="60282835d2fe41e1b998272f94545932"
-                                 Width="200"
-                                 Height="200"
-                                 HeadClicked="MouseWatchingHead_Clicked" />
-        <local:MouseWatchingHead Playername="marneus0091"
-                                 Width="200"
-                                 Height="200" />
-        <local:MouseWatchingHead Playername="StompiOne"
-                                 Width="200"
-                                 Height="200">
-            <local:MouseWatchingHead.Triggers>
-                <EventTrigger RoutedEvent="local:MouseWatchingHead.HeadLoaded">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation Storyboard.TargetProperty="Scale"
-                                             From="1"
-                                             To="1.2"
-                                             AutoReverse="True"
-                                             Duration="0:0:0.5">
-                                <DoubleAnimation.EasingFunction>
-                                    <BackEase />
-                                </DoubleAnimation.EasingFunction>
-                            </DoubleAnimation>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </local:MouseWatchingHead.Triggers>
-        </local:MouseWatchingHead>
-    </StackPanel>
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Margin="0,0,10,0">Enter UUID or Nickname:</TextBlock>
+            <TextBox x:Name="TB" Width="200"></TextBox>
+        </StackPanel>
+        <StackPanel Height="200" Grid.Row="1" 
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+            <local:MouseWatchingHead Playername="{Binding skin, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="200"
+                                     Height="200"
+                                     HeadClicked="MouseWatchingHead_Clicked"
+                                     ToolTip="{Binding skin, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+            <local:MouseWatchingHead Uuid="9c8e1647-0ad9-43b6-abd1-5a3ee3b50b02"
+                                     Width="200"
+                                     Height="200"
+                                     HeadClicked="MouseWatchingHead_Clicked" />
+            <local:MouseWatchingHead Uuid="{Binding ElementName=TB, Path=Text}"
+                                     Width="200"
+                                     Height="200" />
+            <local:MouseWatchingHead Playername="{Binding ElementName=TB, Path=Text}"
+                                     Width="200"
+                                     Height="200">
+                <local:MouseWatchingHead.Triggers>
+                    <EventTrigger RoutedEvent="local:MouseWatchingHead.HeadLoaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Scale"
+                                                 From="1"
+                                                 To="1.2"
+                                                 AutoReverse="True"
+                                                 Duration="0:0:0.5">
+                                    <DoubleAnimation.EasingFunction>
+                                        <BackEase />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </local:MouseWatchingHead.Triggers>
+            </local:MouseWatchingHead>
+        </StackPanel>
+    </Grid>
 </Window>
