@@ -1,9 +1,11 @@
 ﻿using Codeplex.Data;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -30,7 +32,6 @@ namespace leMaik.McHeads
         }
 
         public static async Task<MinecraftSkin> LoadByNicknameAsync(String playername) {
-
             return await Task.Run(async () => {
                                       try {
                                           using (var client = new WebClient()) {
@@ -43,10 +44,31 @@ namespace leMaik.McHeads
                                           return Steve;
                                       }
                                   });
-
         }
 
-        private static async Task<String> GetSkinUrl(String uuid) { return "https://crafatar.com/skins/" + uuid.Replace("-", String.Empty); }
+        private static Dictionary<string, MinecraftSkinUrlQuery> CachedResponces = new Dictionary<string, MinecraftSkinUrlQuery>();
+
+        private static async Task<String> GetSkinUrl(String uuid) {
+            using (WebClient wc = new WebClient()) {
+                string responce = null;
+                if (CachedResponces.TryGetValue(uuid.Replace("-", String.Empty), out var cached) && cached.IsCooldownPassed()) {
+                    responce = cached.Responce;
+                }
+                else {
+                    if (CachedResponces.ContainsKey(uuid.Replace("-", String.Empty)))
+                        CachedResponces.Remove(uuid.Replace("-", String.Empty));
+                    responce = await wc.DownloadStringTaskAsync(@"https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.Replace("-", String.Empty));
+                    CachedResponces.Add(uuid.Replace("-", String.Empty), new MinecraftSkinUrlQuery() {QueryTime = DateTime.Now, Responce = responce});
+                }
+
+                dynamic json = DynamicJson.Parse(responce);
+                byte[] encodedBytes = Convert.FromBase64String(json["properties"][0]["value"]);
+                string decodedString = Encoding.UTF8.GetString(encodedBytes);
+                dynamic data = DynamicJson.Parse(decodedString);
+                var toreturn = data["textures"]["SKIN"]["url"];
+                return data["textures"]["SKIN"]["url"];
+            }
+        }
 
         public static async Task<MinecraftSkin> LoadByUuidAsync(String uuid) {
             string url;
@@ -120,5 +142,17 @@ namespace leMaik.McHeads
     {
         public string id   { get; set; }
         public string name { get; set; }
+    }
+
+    public class MinecraftSkinUrlQuery
+    {
+        public DateTime QueryTime { get; set; }
+        public string   Responce  { get; set; }
+
+        public bool IsCooldownPassed() {
+            TimeSpan pauseMin = TimeSpan.FromMinutes(1.5);
+            DateTime compare = QueryTime.Add(pauseMin);
+            return DateTime.Now >= compare;
+        }
     }
 }
